@@ -18,5 +18,42 @@ pipeline {
                   cd .. '''
             }
         }
+    
+        stage('Start test app') {
+            steps {
+               sh """
+                  # Start app line missing !
+                  chmod 777 ./scripts/test_container.sh
+                  ls -al ./scripts/test_container.sh
+                  ./scripts/test_container.sh
+                  """
+            }
+            post { 
+               success {
+                  echo  " ## App started successfully "
+               }
+               failure {
+                  echo " ## App failed to start "
+               }
+            }
+        }
+
+        stage('Run Tests') { 
+            steps {
+               sh '''
+                  pytest ./tests/test_sample.py
+                  '''
+            }
+        }
+
+        stage('Stop test app') {
+            steps {
+               sh '''
+                  docker-compose down
+                  '''
+            }
+        }
+
+
     }
 }
