@@ -22,7 +22,7 @@ pipeline {
         stage('Start test app') {
             steps {
                sh """
-                  # Start app line missing !
+                  docker-compose up -d
                   chmod 777 ./scripts/test_container.sh
                   ls -al ./scripts/test_container.sh
                   ./scripts/test_container.sh
@@ -41,7 +41,7 @@ pipeline {
         stage('Run Tests') { 
             steps {
                sh '''
-                  pytest ./tests/test_sample.py
+                  pytest-3 ./tests/test_sample.py
                   '''
             }
         }
